@@ -8,12 +8,7 @@
 <body>
   <h1>Simple Blog</h1>
 
-  <!-- Render post list -->
-
-  <h2>Latest posts</h2>
-
-  {{range .}}
-    <h3> <a href="/posts/{{.Slug}}">{{.Title}}</a> </h3>
-  {{end}}
+  <h2>{{.Title}}</h2>
+  <p>{{.Body}}</p>
 </body>
 </html>

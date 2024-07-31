@@ -1,9 +1,11 @@
 package database
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Post struct {
-	Id    int    `json:"id"`
+	Id    int64  `json:"id"`
 	Slug  string `json:"slug"`
 	Title string `json:"title"`
 	Body  string `json:"body"`
@@ -22,6 +24,14 @@ func (p *Post) NewPost() *Post {
 		return nil
 	}
 
+	id, err := result.LastInsertId()
+
+	if err != nil {
+		return nil
+	}
+
+	p.Id = id
+
 	return p
 
 }
@@ -39,8 +49,19 @@ func (p *Post) Delete(id int) {
 }
 
 // Get
-func (p *Post) Get(slug string) {
+func (p *Post) Get(slug string) Post {
 
+	var post Post
+	row := DB.QueryRow("SELECT id, title, body, slug from posts WHERE slug=?", slug)
+	err := row.Scan(&post.Id, &post.Title, &post.Body, &post.Slug)
+
+	if err != nil {
+		fmt.Println("Get post error", err)
+	}
+
+	fmt.Println(post)
+
+	return post
 }
 
 // List

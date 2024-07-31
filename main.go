@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
@@ -21,17 +20,8 @@ func main() {
 
 	r := chi.NewRouter()
 
-	// Home route
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-
-		t, err := template.ParseFiles("templates/index.html")
-
-		if err != nil {
-			fmt.Fprintf(w, "Template error %s", err)
-		}
-
-		t.Execute(w, struct{}{})
-	})
+	// Mount site routes
+	r.Mount("/", routes.SiteRoutes())
 
 	// Mount API Endpoints
 	r.Mount("/api", routes.APIRoutes())
